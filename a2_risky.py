@@ -68,35 +68,38 @@ def main():
     option = get_valid_option()
     while option != "Q":
         if option == "P":
-            outcome = play(1000)
+            outcome = play(current_balance)
+            outcomes.append(outcome)
+            current_balance += outcome
         elif option == "I":
             display_instruction()
         elif option == "D":
             if len(outcomes) == 0:
                 print("No risks taken yet. Get started...")
             else:
-                print("Displaying report")
+                print("Risk-Reward Results Report:")
+                print(f"Starting balance: ${start_balance}")
+                print(f"Current balance: ${current_balance}")
         else:
             if len(outcomes) == 0:
                 print("No risks means no statistics.")
             else:
-                print("Show stats...")
+                print(f"Best result: ${outcomes[-1]}")
+                print(f"Worst result: ${outcomes[0]}")
         option = get_valid_option()
     quit_game()
 
     
-def play():
-    balance = 1000
-    wager = get_valid_amount()
+def play(current_balance):
+    wager = get_valid_amount(current_balance)
     risk_level = get_valid_level()
     outcome = place_bet(wager)
     if outcome > 0: 
         print(f"You won {outcome}")
-        balance += outcome
     else:
         print(f"You lost {wager}")
-        balance -= wager
     print(f"You staked {wager}")
+    return outcome
     # print("\n")
 
 def quit_game():
@@ -109,9 +112,9 @@ def get_valid_option():
         option = input("(P)lay\n(I)nstructions\n(D)isplay Report\n(S)how Statistics\n(Q)uit\nChoose: ").upper()
     return option
 
-def get_valid_amount():
-    amount = float(input("Enter amount to risk: "))
-    while amount <= 10:
+def get_valid_amount(current_balance):
+    amount = float(input(f"Enter amount to risk upto {current_balance}: "))
+    while 10 >= amount < current_balance:
         print("Amount must be greater than 10")
         amount = float(input("Enter amount to risk: "))
     else:
@@ -124,7 +127,8 @@ def get_valid_level():
     return level 
 
 def place_bet(wager):
-    odds = random.randint(1,100)
+    # odds = random.randint(1,100)
+    odds = 0
     if 0 < odds < SILLY_RISK_LEVEL: #falls under silly risk level 
         return  wager * SILLY_REWARD
     elif SILLY_RISK_LEVEL < odds < AGGRESSIVE_RISK_LEVEL: #falls under aggressive risk level 
@@ -132,7 +136,7 @@ def place_bet(wager):
     elif AGGRESSIVE_RISK_LEVEL< odds < CONSERVATIVE_RISK_LEVEL : #falls under conservative risk level 
         return  wager * CONSERVATIVE_REWARD
     else:
-        return 0
+        return -wager
     
 def display_instruction():
     print("Risky Business.\n Each turn, you can risk some of your cash to try and win a reward.\n You can choose a risk level: \n - conservative (64% chance for a +25% reward)\n - aggressive (44% chance for a +60% reward)\n - silly (8% chance for a +125% reward)")
