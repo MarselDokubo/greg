@@ -114,8 +114,11 @@ def get_valid_option():
 
 def get_valid_amount(current_balance):
     amount = float(input(f"Enter amount to risk upto {current_balance}: "))
-    while 10 >= amount < current_balance:
+    while 10 >= amount:
         print("Amount must be greater than 10")
+        amount = float(input("Enter amount to risk: "))
+    if amount > current_balance:
+        print(f"Amount must be less than current")
         amount = float(input("Enter amount to risk: "))
     else:
         return amount 
