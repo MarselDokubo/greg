@@ -1,0 +1,34 @@
+def question_1():
+    print_hyphens()
+
+def question_2():
+    some_number = int(input("Number: "))
+    if is_even(some_number):
+        print(f"{some_number} is even")
+    else:
+        print(f"{some_number} is odd")
+def is_even(num):
+    return num % 2 == 0
+
+def question_3():
+    name = get_valid_string("What is your name: ")
+    birth_place = get_valid_string("Where are you from: ")
+    print(f"Hi {name} from {birth_place}")
+def get_valid_string(msg):
+    ip = input(msg)
+    if ip == "":
+        print("Input cannot be blank")
+        ip = input(msg)
+    return ip 
+
+
+
+def get_valid_num(msg):
+    is_invalid_input = False
+    while not is_invalid_input:
+        try:
+            num = int(input(msg))
+            is_invalid_input = True
+        except ValueError:
+            print("Invalid input")
+    return num 
